@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { protect } from '../middleware/auth.js';
+import { getProject, ownerOnly, projectMember } from '../middleware/projectAccess.js';
+import * as c from '../controllers/projectController.js';
+const r=Router();
+r.use(protect);
+r.get('/',c.listProjects); r.post('/',c.createProject);
+r.get('/:id',getProject,projectMember,c.getProjectDetails);
+r.put('/:id',getProject,ownerOnly,c.updateProject);
+r.delete('/:id',getProject,ownerOnly,c.deleteProject);
+r.patch('/:id/archive',getProject,ownerOnly,c.archiveProject);
+r.post('/:id/members',getProject,ownerOnly,c.addMember);
+r.delete('/:id/members',getProject,ownerOnly,c.removeMember);
+export default r;
